@@ -13,16 +13,16 @@ return new class extends Migration
     {
         Schema::create('empresa_user', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('empresas_id');
-            $table->unsignedBigInteger('users_id');
+            $table->unsignedBigInteger('empresa_id');
+            $table->unsignedBigInteger('user_id');
             // Otras columnas adicionales que puedan ser necesarias para esta relación
 
-            $table->foreign('empresas_id')->references('id')->on('empresas')->onDelete('cascade');
-            $table->foreign('users_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
             // Establecer clave única compuesta para evitar duplicados
-            $table->unique(['empresas_id', 'users_id']);
-           
+            $table->unique(['empresa_id', 'user_id']);
+
         });
     }
 

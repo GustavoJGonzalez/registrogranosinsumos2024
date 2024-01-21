@@ -19,6 +19,13 @@ use Filament\Tables\Actions\DeleteAction;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\UserResource\Pages;
 use STS\FilamentImpersonate\Tables\Actions\Impersonate;
+//  BelongsToManySelect
+use Filament\Forms\Components\BelongsToManySelect;
+use Filament\Forms\Components\Select;
+
+//Has many
+
+
 
 //use App\Filament\Resources\UserResource\RelationManagers\EmpresaRelationManagers;
 
@@ -44,16 +51,16 @@ class UserResource extends Resource
 
 
 
-   // public static function getRelations(): array
-   // {
+//    public static function getRelations(): array
+//    {
 //        $relations = [];
-//
-  //      if (auth ()->user()-> hasRoles('admin'))  {
-   //         $relations[] = RelationManagersClienteRelationManager::class;
-//
- //       }
-  //      return $relations;
-   // }
+
+//        if (auth ()->user()-> hasRoles('admin'))  {
+//            $relations[] = RelationManagersClienteRelationManager::class;
+
+//        }
+//        return $relations;
+//    }
 
 
 
@@ -92,13 +99,17 @@ class UserResource extends Resource
                             ? Hash::make($state)
                             : User::find($form->getColumns())?->password;
                 }),
+            Select::make('empresas')
+                ->multiple()
+                ->relationship('empresas', 'nombre')
+                ->label('Empresas')->preload()
         ];
 
         if (config('filament-user.shield')) {
             $rows[] = Forms\Components\Select::make('roles')
                 ->multiple()
                 ->relationship('roles', 'name')
-                ->label(trans('filament-user::user.resource.roles'));
+                ->label(trans('filament-user::user.resource.roles'))->preload();
         }
 
         $form->schema($rows);
@@ -162,15 +173,15 @@ class UserResource extends Resource
             'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
     }
-    //public static function getRelations(): array
-    //{
-    //    return [
-    //        RelationManagers\EmpresaRelationManager::class,
-    //    ];
-    //}
+    public static function getRelations(): array
+    {
+       return [
+           //RelationManagers\EmpresaRelationManager::class,
+       ];
+    }
     public function teams()
     {
         return $this->belongsToMany(Team::class)->withPivot('role');
-    } 
+    }
 
 }

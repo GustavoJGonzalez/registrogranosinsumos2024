@@ -13,7 +13,13 @@ class Empresa extends Model
 
     public function recepcion()
     {
-        
+
         return $this->belongsTo(Recepcion::class, 'empresas_id');
+    }
+
+    // Un usuario puede tener muchas empresas
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
     }
 }

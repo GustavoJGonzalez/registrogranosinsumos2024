@@ -66,40 +66,46 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-
-
+    // Una empresa puede tener muchos usuarios
     public function empresas()
     {
-        if ($this->esUsuarioH3()) {
-            // Si el usuario es UsuarioH3, mostrar solo la empresa H3 Agricola
-            return $this->belongsToMany(Empresa::class, 'empresa_user', 'user_id', 'empresas_id')
-                ->where('nombre_empresa', 'H3 Agricola');
-        }
-
-        // Para otros roles o usuarios, mostrar todas las empresas asociadas a ellos
-        return $this->belongsToMany(Empresa::class, 'empresa_user', 'user_id', 'empresas_id');
+        return $this->belongsToMany(Empresa::class);
     }
 
 
-    public function esJefe()
-    {
-        // Aquí debes implementar la lógica para determinar si el usuario es un jefe
-        // Por ejemplo, supongamos que el campo 'rol' en la tabla de usuarios indica el rol de cada usuario
-        return $this->roles === 'jefe';
-    }
 
-    public function esUsuarioH3()
-    {
-        // Aquí debes implementar la lógica para determinar si el usuario es un jefe
-        // Por ejemplo, supongamos que el campo 'rol' en la tabla de usuarios indica el rol de cada usuario
-        return $this->roles === 'UsuarioH3';
-    }
-    public function recepcion()
-    {
-        
-        return $this->belongsTo(Recepcion::class, 'user_id');
-    }
-    
+    // public function empresas()
+    // {
+    //     if ($this->esUsuarioH3()) {
+    //         // Si el usuario es UsuarioH3, mostrar solo la empresa H3 Agricola
+    //         return $this->belongsToMany(Empresa::class, 'empresa_user', 'user_id', 'empresas_id')
+    //             ->where('nombre_empresa', 'H3 Agricola');
+    //     }
+
+    //     // Para otros roles o usuarios, mostrar todas las empresas asociadas a ellos
+    //     return $this->belongsToMany(Empresa::class, 'empresa_user', 'user_id', 'empresas_id');
+    // }
+
+
+    // public function esJefe()
+    // {
+    //     // Aquí debes implementar la lógica para determinar si el usuario es un jefe
+    //     // Por ejemplo, supongamos que el campo 'rol' en la tabla de usuarios indica el rol de cada usuario
+    //     return $this->roles === 'jefe';
+    // }
+
+    // public function esUsuarioH3()
+    // {
+    //     // Aquí debes implementar la lógica para determinar si el usuario es un jefe
+    //     // Por ejemplo, supongamos que el campo 'rol' en la tabla de usuarios indica el rol de cada usuario
+    //     return $this->roles === 'UsuarioH3';
+    // }
+    // public function recepcion()
+    // {
+
+    //     return $this->belongsTo(Recepcion::class, 'user_id');
+    // }
+
 }
 
 

@@ -87,8 +87,8 @@ class RecepcionResource extends Resource
             Forms\Components\TextInput::make('pesoBruto')
             //->reactive()
             ->afterStateUpdated(function ($state, callable $set, callable $get) {
-                $pesoBruto = $get('pesoBruto'); 
-                $pesoTara = $get('pesoTara'); 
+                $pesoBruto = $get('pesoBruto');
+                $pesoTara = $get('pesoTara');
                 if ($pesoBruto !== null && $pesoTara !== null) {
                     $pesoNeto = $pesoBruto - $pesoTara;
                     $set('pesoNeto', $pesoNeto);
@@ -120,7 +120,7 @@ class RecepcionResource extends Resource
             ->required()
             ->autocomplete()
             ->maxLength(255),
-          
+
             Forms\Components\TextInput::make('chapaSemi')
             //->required()
             //->default(function () {
@@ -160,7 +160,7 @@ class RecepcionResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('empresas.nombre')->label('EMPRESA'),
-               
+
                 Tables\Columns\TextColumn::make('productos.nombre')->label('PRODUCTOS'),
 
                 Tables\Columns\TextColumn::make('chofer')->label('CHOFER'),
@@ -178,7 +178,7 @@ class RecepcionResource extends Resource
                 ->toggleable(isToggledHiddenByDefault: true),
 
                 Tables\Columns\TextColumn::make('silos.nombre')->label('SILO')
-                ->toggleable(isToggledHiddenByDefault: true),  
+                ->toggleable(isToggledHiddenByDefault: true),
 
                 Tables\Columns\TextColumn::make('humedad')->label('HUMEDAD'),
                 TextColumn::make('humedad')
@@ -188,13 +188,13 @@ class RecepcionResource extends Resource
                 ->toggleable(isToggledHiddenByDefault: true),
 
 
-              
+
 
                 Tables\Columns\TextColumn::make('chapaCamion')->label('CHAPA CAMION')
                 ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('chapaSemi')->label('CHAPA SEMI')
                 ->toggleable(isToggledHiddenByDefault: true),
-               
+
                 Tables\Columns\TextColumn::make('zafras.año')->label('ZAFRA')
                 ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('fecha_registro')
@@ -203,37 +203,37 @@ class RecepcionResource extends Resource
                 ->time()->label('HORA'),
             ])
             ->filters([
-    
+
                 SelectFilter::make('Empresa')->relationship('empresas', 'nombre'),
                 SelectFilter::make('Producto')->relationship('productos', 'nombre'),
                 SelectFilter::make('Parcela')->relationship('parcelas', 'nombre'),
                 SelectFilter::make('Silo')->relationship('silos', 'nombre'),
-                SelectFilter::make('Zafra')->relationship('zafras', 'año')
+                SelectFilter::make('Zafra')->relationship('zafras', 'año'),
 
 
 
-                ->options(
-                    Auth::user()->esJefe() 
-                        ? Empresa::pluck('nombre', 'id') // Para jefes, muestra todas las empresas
-                        : Empresa::where('id', Auth::user()->empresas_id)->pluck('nombre', 'id') // Para clientes, muestra solo su empresa
-                )
-                ->default(
-                    Auth::user()->esUsuarioH3() 
-                        ? null // No se establece un valor predeterminado para jefes
-                        : Auth::user()->empresas_id // Establecer la empresa del cliente como valor predeterminado
-                ),
+                // ->options(
+                //     Auth::user()->esJefe()
+                //         ? Empresa::pluck('nombre', 'id') // Para jefes, muestra todas las empresas
+                //         : Empresa::where('id', Auth::user()->empresas_id)->pluck('nombre', 'id') // Para clientes, muestra solo su empresa
+                // )
+                // ->default(
+                //     Auth::user()->esUsuarioH3()
+                //         ? null // No se establece un valor predeterminado para jefes
+                //         : Auth::user()->empresas_id // Establecer la empresa del cliente como valor predeterminado
+                // ),
 
 
 
 
 
 
-           
+
                 Filter::make('created_at')
                 ->form([
                     Forms\Components\DatePicker::make('created_from')->label('Fecha Inicio'),
                     Forms\Components\DatePicker::make('created_until')->label('Fecha Fin'),
-                    
+
                 ])
                 ->query(function (Builder $query, array $data): Builder {
                     return $query
@@ -246,10 +246,10 @@ class RecepcionResource extends Resource
                             fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
                         );
 
-                        if (!Auth::user()->esJefe()) {
-                            // Si es un cliente, solo mostrar las recepciones de su empresa
-                            $query->where('empresas_id', Auth::user()->empresa_id);
-                        }
+                        // if (!Auth::user()->esJefe()) {
+                        //     // Si es un cliente, solo mostrar las recepciones de su empresa
+                        //     $query->where('empresas_id', Auth::user()->empresa_id);
+                        // }
 
 
 
@@ -276,7 +276,7 @@ class RecepcionResource extends Resource
 
 
 
-            
+
     }
 
     public static function getRelations(): array

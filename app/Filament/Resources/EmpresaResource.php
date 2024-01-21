@@ -48,7 +48,7 @@ class EmpresaResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('ruc')
                     ->searchable(),
-                   
+
                 Tables\Columns\TextColumn::make('direccion')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('fecha_registro')
@@ -103,13 +103,18 @@ class EmpresaResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         // Obtener el usuario actualmente autenticado
-    $user = Auth::user();
+    // $user = Auth::user();
 
-    // Verificar si el usuario es "UsuarioH3"
-    if ($user->esJefe()) { // Suponiendo que tienes una función "esJefe" en tu modelo User
-        // Si el usuario es "UsuarioH3", filtrar las empresas por nombre
-        return parent::getEloquentQuery()
-            ->where('nombre', 'H3 Agricola');
+    // // Verificar si el usuario es "UsuarioH3"
+    // if ($user->esJefe()) { // Suponiendo que tienes una función "esJefe" en tu modelo User
+    //     // Si el usuario es "UsuarioH3", filtrar las empresas por nombre
+    //     return parent::getEloquentQuery()
+    //         ->where('nombre', 'H3 Agricola');
+    // }
+    if (!auth()->user()->hasRole('super_admin')) {
+        return static::getModel()::query()->whereHas('users', function ($query) {
+            $query->where('users.id', auth()->id());
+        });
     }
 
     // Si no es "UsuarioH3", mostrar todas las empresas
