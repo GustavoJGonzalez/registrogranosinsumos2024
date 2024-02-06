@@ -11,15 +11,16 @@ class Empresa extends Model
     use HasFactory, SoftDeletes;
     protected $fillable = ['nombre','ruc','direccion','fecha_registro'];
 
-    public function recepcion()
+    public function recepcions()
     {
-
-        return $this->belongsTo(Recepcion::class, 'empresas_id');
+        return $this->hasMany(Recepcion::class);
     }
+
+
 
     // Un usuario puede tener muchas empresas
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class, 'empresa_user', 'empresa_id', 'user_id');
     }
 }

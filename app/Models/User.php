@@ -69,7 +69,7 @@ class User extends Authenticatable
     // Una empresa puede tener muchos usuarios
     public function empresas()
     {
-        return $this->belongsToMany(Empresa::class);
+        return $this->belongsToMany(Empresa::class, 'empresa_user', 'user_id', 'empresa_id');
     }
 
 
