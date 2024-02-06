@@ -52,12 +52,11 @@ class Recepcion extends Model
     // Un usuario puede tener muchas recepciones
     public function users()
     {
-<<<<<<< HEAD
         return $this->belongsToMany(User::class);
     }
 
 
-   
+
 
     // Una recepcion pertenece a una empresa
     public function empresa()
@@ -68,9 +67,5 @@ class Recepcion extends Model
     public function scopePorEmpresa($query, $empresaId)
     {
         return $query->where('empresas_id', $empresaId);
-=======
-
-       return $this->belongsToMany(User::class, 'user_id');
->>>>>>> refs/remotes/origin/main
     }
 }
