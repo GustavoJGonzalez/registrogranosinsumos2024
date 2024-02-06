@@ -43,6 +43,11 @@ use AlperenErsoy\FilamentExport\Actions\FilamentExportBulkAction;
 
 use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 
+use Filament\Forms\Action;
+use App\Models\Post;
+
+
+
 
 
 
@@ -55,8 +60,23 @@ class RecepcionResource extends Resource
     protected static ?string $navigationGroup = 'RECEPCIONES';
 
     public static function form(Form $form): Form
-    {
+    {  
+        
+      // Action::make('updateRecepcion')
+        //->fillForm(fn (Recepcion $record): array => [
+          //  'empresas_id' => $record->empresas_id,
+            //'zafras_id' => $record->zafras_id,
+            //'productos_id' => $record->productos_id,
+            // ... (otras columnas)
+        //]);
+
+        
+        
+     
+        
         return $form
+      
+
         ->schema([
             Forms\Components\Select::make('empresas_id')
             ->required()->relationship('empresas', 'nombre'),
@@ -153,6 +173,7 @@ class RecepcionResource extends Resource
            ->default(fn () => now()),
            //->disabled(),
         ]);
+        
     }
 
     public static function table(Table $table): Table

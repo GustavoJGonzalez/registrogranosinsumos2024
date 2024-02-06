@@ -48,9 +48,24 @@ class Recepcion extends Model
 
 
 
+
+    // Un usuario puede tener muchas recepciones
     public function users()
     {
-        
-       return $this->belongsToMany(User::class, 'user_id');
+        return $this->belongsToMany(User::class);
+    }
+
+
+   
+
+    // Una recepcion pertenece a una empresa
+    public function empresa()
+    {
+        return $this->belongsTo(Empresa::class, 'empresas_id');
+    }
+
+    public function scopePorEmpresa($query, $empresaId)
+    {
+        return $query->where('empresas_id', $empresaId);
     }
 }

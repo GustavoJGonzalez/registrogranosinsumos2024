@@ -74,6 +74,24 @@ class User extends Authenticatable
 
 
 
+   // Una recepcion puede pertenecer a muchos usuarios
+    public function recepcions()
+    {
+        return $this->belongsToMany(Recepcion::class);
+    }
+
+
+
+
+
+        // En el modelo User
+    public function essuper_admin()
+    {
+        return $this->hasRole('super_admin');
+    }
+
+
+
     // public function empresas()
     // {
     //     if ($this->esUsuarioH3()) {

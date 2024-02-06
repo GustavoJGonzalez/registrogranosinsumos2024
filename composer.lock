@@ -197,16 +197,16 @@
         },
         {
             "name": "bezhansalleh/filament-shield",
-            "version": "3.1.2",
+            "version": "3.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bezhanSalleh/filament-shield.git",
-                "reference": "e4d6ee81d3d15c94dfe7a5bfb0262050e4324398"
+                "reference": "d444f1fabee946ba9760d934f74db48794d49411"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bezhanSalleh/filament-shield/zipball/e4d6ee81d3d15c94dfe7a5bfb0262050e4324398",
-                "reference": "e4d6ee81d3d15c94dfe7a5bfb0262050e4324398",
+                "url": "https://api.github.com/repos/bezhanSalleh/filament-shield/zipball/d444f1fabee946ba9760d934f74db48794d49411",
+                "reference": "d444f1fabee946ba9760d934f74db48794d49411",
                 "shasum": ""
             },
             "require": {
@@ -270,7 +270,7 @@
             ],
             "support": {
                 "issues": "https://github.com/bezhanSalleh/filament-shield/issues",
-                "source": "https://github.com/bezhanSalleh/filament-shield/tree/3.1.2"
+                "source": "https://github.com/bezhanSalleh/filament-shield/tree/3.1.3"
             },
             "funding": [
                 {
@@ -278,7 +278,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-12-19T05:32:27+00:00"
+            "time": "2024-01-12T04:46:58+00:00"
         },
         {
             "name": "blade-ui-kit/blade-heroicons",
