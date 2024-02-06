@@ -326,6 +326,15 @@ class RecepcionResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
+        // dd(auth()->user()->id);
+        if (!auth()->user()->hasRole('super_admin')) {
+            return static::getModel()::query()->whereHas('empresas', function ($query) {
+                $query->where('empresas_id', auth()->user()->empresas->pluck('id'));
+            });
+        }
+
+
+
         return parent::getEloquentQuery()
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,

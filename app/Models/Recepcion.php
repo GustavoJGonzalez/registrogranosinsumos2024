@@ -14,37 +14,37 @@ class Recepcion extends Model
 
     public function empresas()
     {
-        
+
         return $this->belongsTo(Empresa::class, 'empresas_id');
     }
     public function zafras()
     {
-        
+
         return $this->belongsTo(Zafra::class, 'zafras_id');
     }
     public function productos()
     {
-        
+
         return $this->belongsTo(Producto::class, 'productos_id');
     }
 
 
     public function parcelas()
     {
-        
+
         return $this->belongsTo(Parcela::class, 'parcelas_id');
     }
 
     public function silos()
     {
-        
+
         return $this->belongsTo(Silo::class, 'silos_id');
     }
 
 
 
 
-  
+
 
 
 
@@ -52,6 +52,7 @@ class Recepcion extends Model
     // Un usuario puede tener muchas recepciones
     public function users()
     {
+<<<<<<< HEAD
         return $this->belongsToMany(User::class);
     }
 
@@ -67,5 +68,9 @@ class Recepcion extends Model
     public function scopePorEmpresa($query, $empresaId)
     {
         return $query->where('empresas_id', $empresaId);
+=======
+
+       return $this->belongsToMany(User::class, 'user_id');
+>>>>>>> refs/remotes/origin/main
     }
 }
