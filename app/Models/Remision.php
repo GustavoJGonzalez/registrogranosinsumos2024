@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Remision extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $fillable = ['empresas_id','zafras_id','productos_id','empresa_clientes_id','transportadoras_id','chofer','pesoTara','pesoBruto','pesoNeto','chapaCamion','chapaSemi','humedad','impureza','fecha_registro','hora_registro'];
+    protected $fillable = ['empresas_id','zafras_id','productos_id','empresa_clientes_id','transportadoras_id','chofers_id','ci','celular','domicilio','pesoTara','pesoBruto','pesoNeto','chapaCamion','chapaSemi','humedad','impureza','fecha_ingreso','hora_ingreso'];
 
     public function empresas()
     {
@@ -37,6 +37,12 @@ class Remision extends Model
     {
         
         return $this->belongsTo(EmpresaCliente::class, 'empresa_clientes_id');
+    }
+
+    public function chofers()
+    {
+        
+        return $this->belongsTo(Chofer::class, 'chofers_id');
     }
 }
 

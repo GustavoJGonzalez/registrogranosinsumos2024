@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Recepcion extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $fillable = ['empresas_id','zafras_id','productos_id','parcelas_id','silos_id','chofer','pesoBruto','pesoTara','pesoNeto','chapaCamion','chapaSemi','humedad','impureza','fecha_registro','hora_registro'];
+    protected $fillable = ['empresas_id','zafras_id','productos_id','parcelas_id','silos_id','transportadoras_id','chofers_id','ci','celular','domicilio','pesoBruto','pesoTara','pesoNeto','chapaCamion','chapaSemi','humedad','impureza','fecha_ingreso','hora_ingreso'];
 
     public function empresas()
     {
@@ -42,7 +42,16 @@ class Recepcion extends Model
     }
 
 
-
+    public function chofers()
+    {
+        
+        return $this->belongsTo(Chofer::class, 'chofers_id');
+    }
+    public function transportadoras()
+    {
+        
+        return $this->belongsTo(Transportadora::class, 'transportadoras_id');
+    }
 
 
 

@@ -2,7 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RecepcionController;
-
+use App\Http\Controllers\RemisionController;
+use App\Http\Controllers\ChoferController;
+use App\Http\Controllers\TicketController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -27,7 +29,11 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 });
-
+Route::get('/create-remision/{id}', [RemisionController::class, 'createFromControlAcceso']);
 
 Route::get('/obtenerChapaCamion', [RecepcionController::class, 'obtenerChapaCamion']);
 
+Route::resource('chofers', ChoferController::class);
+
+
+Route::get('/generate-ticket', [TicketController::class, 'generateTicket']);

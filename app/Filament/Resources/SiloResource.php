@@ -18,7 +18,8 @@ class SiloResource extends Resource
     protected static ?string $model = Silo::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-home-modern';
-
+    protected static ?string $navigationGroup = 'REGISTRO VARIOS';
+   
     public static function form(Form $form): Form
     {
         return $form

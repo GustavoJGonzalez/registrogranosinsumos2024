@@ -29,6 +29,7 @@ class RecepcionInsumoResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
     protected static ?string $navigationGroup = 'RECEPCIONES';
+    protected static ?string $navigationLabel = 'Recepcion de Insumos'; 
 
     public static function form(Form $form): Form
     {
@@ -109,30 +110,41 @@ class RecepcionInsumoResource extends Resource
     {
         return $table
         ->columns([
-            Tables\Columns\TextColumn::make('empresas_clientes.nombre')->label('EMISOR'),
-            Tables\Columns\TextColumn::make('empresas.nombre')->label('RAZON SOCIAL'),
-            Tables\Columns\TextColumn::make('insumos.nombre')->label('INSUMO'),
+            Tables\Columns\TextColumn::make('empresas_clientes.nombre')->label('EMISOR')->alignCenter(), // Centro el contenido de la columna,
+            Tables\Columns\TextColumn::make('empresas.nombre')->label('RAZON SOCIAL')->alignCenter(), // Centro el contenido de la columna,
+            Tables\Columns\TextColumn::make('insumos.nombre')->label('INSUMO')->alignCenter(), // Centro el contenido de la columna,
             //Tables\Columns\TextColumn::make('medidas.nombre')->label('MEDIDA'),
             
            
-            Tables\Columns\TextColumn::make('chofer')->label('CHOFER'),
-            Tables\Columns\TextColumn::make('pesoBruto')->label('PESO BRUTO'),
-            Tables\Columns\TextColumn::make('pesoTara')->label('PESO TARA'),
-            Tables\Columns\TextColumn::make('pesoNeto')->label('PESO NETO'),
+            Tables\Columns\TextColumn::make('chofer')->label('CHOFER')->alignCenter(), // Centro el contenido de la columna,
+            Tables\Columns\TextColumn::make('pesoBruto')->label('PESO BRUTO(KG)')->alignCenter() // Centro el contenido de la columna,
+            ->formatStateUsing(function ($state) {
+                return number_format($state, 0, ',', ','); // Formatear con separador de miles
+            }),
+
+            Tables\Columns\TextColumn::make('pesoTara')->label('PESO TARA(KG)')->alignCenter() // Centro el contenido de la columna,
+            ->formatStateUsing(function ($state) {
+                return number_format($state, 0, ',', ','); // Formatear con separador de miles
+            }),
+            Tables\Columns\TextColumn::make('pesoNeto')->label('PESO NETO(KG)')->alignCenter(), // Centro el contenido de la columna,
+           
             TextColumn::make('pesoNeto')
-            ->label('PESO NETO')
+            ->label('PESO NETO(KG)')
             ->summarize(Sum::make())
             ->sortable()
-            ->searchable(),
-            Tables\Columns\TextColumn::make('numeroRemision')->label('N~ REMISION'),
-            Tables\Columns\TextColumn::make('chapaCamion')->label('CHAPA CAMION'),
+            ->searchable()->alignCenter() // Centro el contenido de la columna,
+            ->formatStateUsing(function ($state) {
+                return number_format($state, 0, ',', ','); // Formatear con separador de miles
+            }),
+            Tables\Columns\TextColumn::make('numeroRemision')->label('N~ REMISION')->alignCenter(), // Centro el contenido de la columna,
+            Tables\Columns\TextColumn::make('chapaCamion')->label('CHAPA CAMION')->alignCenter(), // Centro el contenido de la columna,
             Tables\Columns\TextColumn::make('chapaSemi')->label('CHAPA SEMI')
-            ->toggleable(isToggledHiddenByDefault: true),
+            ->toggleable(isToggledHiddenByDefault: true)->alignCenter(), // Centro el contenido de la columna,
             
             Tables\Columns\TextColumn::make('fecha_registro')
-            ->date()->label('FECHA'),
+            ->date()->label('FECHA')->alignCenter(), // Centro el contenido de la columna,
             Tables\Columns\TextColumn::make('hora_registro')
-            ->time()->label('HORA'),
+            ->time()->label('HORA')->alignCenter(), // Centro el contenido de la columna,
         ])
             ->filters([
                 
@@ -190,6 +202,15 @@ class RecepcionInsumoResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
+         // dd(auth()->user()->id);
+         if (!auth()->user()->hasRole('super_admin')) {
+            return static::getModel()::query()->whereHas('empresas', function ($query) {
+                $query->where('empresas_id', auth()->user()->empresas->pluck('id'));
+            });
+        }
+
+
+
         return parent::getEloquentQuery()
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,

@@ -26,6 +26,7 @@ class RecepcionGranosResource extends Resource
     protected static ?string $model = RecepcionGranos::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationGroup = 'REGISTRO VARIOS';
 
     public static function form(Form $form): Form
     {

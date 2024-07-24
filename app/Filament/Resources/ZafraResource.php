@@ -18,7 +18,7 @@ class ZafraResource extends Resource
     protected static ?string $model = Zafra::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-calendar';
-    protected static ?string $navigationGroup = 'ZAFRAS';
+    protected static ?string $navigationGroup = 'REGISTRO VARIOS';
 
     public static function form(Form $form): Form
     {

@@ -41,5 +41,71 @@
         @stack('modals')
 
         @livewireScripts
+
+
+        @stack('scripts')
+
+            <!-- Agrega tu script aquí -->
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    function formatNumberInput(input) {
+                        input.addEventListener('input', function (e) {
+                            // Remove all non-digit characters
+                            let value = e.target.value.replace(/\D/g, '');
+
+                            // Limit to a maximum length
+                            if (value.length > 5) {
+                                value = value.slice(0, 5);
+                            }
+
+                            // Format with thousands separator
+                            const formattedValue = new Intl.NumberFormat('es-ES').format(value);
+                            e.target.value = formattedValue;
+                        });
+                    }
+
+                    const pesoBruto = document.getElementById('pesoBruto');
+                    const pesoTara = document.getElementById('pesoTara');
+                    const pesoNeto = document.getElementById('pesoNeto');
+
+                    if (pesoBruto) formatNumberInput(pesoBruto);
+                    if (pesoTara) formatNumberInput(pesoTara);
+                    if (pesoNeto) formatNumberInput(pesoNeto);
+                });
+            </script>
+
+                @section('content')
+                    <form>
+                        <div>
+                            <label for="pesoBruto">Peso Bruto:</label>
+                            <input type="text" id="pesoBruto" name="peso_bruto" maxlength="8">
+                        </div>
+                        <div>
+                            <label for="pesoTara">Peso Tara:</label>
+                            <input type="text" id="pesoTara" name="peso_tara" maxlength="8">
+                        </div>
+                        <div>
+                            <label for="pesoNeto">Peso Neto:</label>
+                            <input type="text" id="pesoNeto" name="peso_neto" maxlength="8">
+                        </div>
+                        <!-- otros campos de formulario -->
+                    </form>
+                @endsection
     </body>
+</html>
+
+
+
+<!-- resources/views/layouts/app.blade.php -->
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <!-- Otros meta tags y enlaces -->
+    @livewireStyles
+</head>
+<body>
+    <!-- Contenido de la aplicación -->
+    @livewireScripts
+    <script src="//unpkg.com/alpinejs" defer></script>
+</body>
 </html>

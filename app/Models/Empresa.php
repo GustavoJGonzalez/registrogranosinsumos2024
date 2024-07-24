@@ -28,5 +28,10 @@ class Empresa extends Model
     public function recepcions()
     {
         return $this->hasMany(Recepcion::class, 'empresas_id');
+
+    }
+    public function control_acceso()
+    {
+        return $this->hasMany(ControlAcceso::class, 'empresas_id');
     }
 }

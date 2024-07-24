@@ -19,6 +19,7 @@ class InsumoResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-fire';
     protected static ?string $navigationGroup = 'PRODUCTOS';
+    protected static ?string $navigationLabel = 'Productos Insumos'; 
 
     public static function form(Form $form): Form
     {
@@ -26,7 +27,10 @@ class InsumoResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('nombre')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->afterStateUpdated(function ($state, $set) {
+                        $set('nombre', strtoupper($state));
+                    }),// este codigo sirve si se escribe en minuscula paso todos en mayuscula
             ]);
     }
 

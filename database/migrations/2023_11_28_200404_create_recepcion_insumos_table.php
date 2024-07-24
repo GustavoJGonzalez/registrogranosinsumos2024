@@ -18,14 +18,29 @@ return new class extends Migration
             $table->unsignedBigInteger('insumos_id');
        
             $table->string('numeroRemision');
-            $table->string('chofer');
-            $table->integer('pesoBruto');
-            $table->integer('pesoTara');
-            $table->integer('pesoNeto');
+            $table->unsignedBigInteger('chofers_id');
+            $table->string('ci'); 
+            $table->string('celular');
+            $table->string('domicilio');
+            $table->integer('pesoBruto')->nullable();
+            $table->integer('pesoTara')->nullable();
+            $table->integer('pesoNeto')->nullable();
             $table->string('chapaCamion');
             $table->string('chapaSemi');
-            $table->date('fecha_registro');
-            $table->time('hora_registro');
+            
+            $table->date('fecha_ingreso');
+            $table->time('hora_ingreso');
+
+            $table->date('fecha_ingresoB')->nullable();
+            $table->time('hora_ingresoB')->nullable();
+
+            $table->boolean('is_approved')->default(false);
+
+            $table->date('fecha_salidaB')->nullable();
+            $table->time('hora_salidaB')->nullable();
+
+            $table->date('fecha_salida')->nullable();
+            $table->time('hora_salida')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

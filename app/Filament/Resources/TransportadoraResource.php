@@ -26,7 +26,10 @@ class TransportadoraResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('nombre')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->afterStateUpdated(function ($state, $set) {
+                        $set('nombre', strtoupper($state));
+                    }),// este codigo sirve si se escribe en minuscula paso todos en mayuscula
                 Forms\Components\TextInput::make('ruc')
                     ->required()
                     ->maxLength(255),

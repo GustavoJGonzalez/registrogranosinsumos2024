@@ -21,6 +21,7 @@ class EmpresaResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-building-office-2';
     protected static ?string $navigationGroup = 'EMPRESAS';
+    protected static ?string $navigationLabel = 'Empresa Local'; 
 
     public static function form(Form $form): Form
     {
@@ -28,13 +29,20 @@ class EmpresaResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('nombre')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->afterStateUpdated(function ($state, $set) {
+                        $set('nombre', strtoupper($state));
+                    }),// este codigo sirve si se escribe en minuscula paso todos en mayuscula
+                
                 Forms\Components\TextInput::make('ruc')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('direccion')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                     ->afterStateUpdated(function ($state, $set) {
+                        $set('nombre', strtoupper($state));
+                    }), // este codigo sirve si se escribe en minuscula paso todos en mayuscula
                 Forms\Components\DatePicker::make('fecha_registro')
                     ->required(),
             ]);
@@ -46,6 +54,8 @@ class EmpresaResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('nombre')
                     ->searchable(),
+                    
+                
                 Tables\Columns\TextColumn::make('ruc')
                     ->searchable(),
 

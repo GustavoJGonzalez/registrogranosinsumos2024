@@ -36,7 +36,8 @@ class UserResource extends Resource
     protected static ?int $navigationSort = 9;
 
     protected static ?string $navigationIcon = 'heroicon-o-lock-closed';
-
+    protected static ?string $navigationGroup = 'ADMINISTRACION DE USUARIOS';
+    protected static ?string $navigationLabel = 'Usuarios'; 
     public static function getNavigationLabel(): string
     {
         return trans('filament-user::user.resource.label');
@@ -183,5 +184,7 @@ class UserResource extends Resource
     {
         return $this->belongsToMany(Team::class)->withPivot('role');
     }
+  
+
 
 }

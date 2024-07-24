@@ -16,4 +16,10 @@ class Transportadora extends Model
         
         return $this->belongsTo(Transportadora::class, 'transportadoras_id');
     }
+
+    public function controlAcceso()
+    {
+        
+        return $this->belongsTo(Transportadora::class, 'transportadoras_id');
+    }
 }

@@ -29,6 +29,7 @@ use Filament\Tables\ColumnValue\TextValue;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\Summarizers\Count;
 //use Illuminate\Database\Query\Builder;
+use App\Models\Chofer;
 
 class RemisionResource extends Resource
 {
@@ -36,6 +37,7 @@ class RemisionResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-check';
     protected static ?string $navigationGroup = 'EMBARQUE';
+    protected static ?string $navigationLabel = 'Remision de Granos'; 
 
     public static function form(Form $form): Form
     {
@@ -56,9 +58,63 @@ class RemisionResource extends Resource
             Forms\Components\Select::make('transportadoras_id')
             ->required()->relationship('transportadoras', 'nombre'),
 
+            Forms\Components\TextInput::make('cedula_chofer')
+            //->required()
+            ->label('Cédula del Chofer')
+            ->maxLength(255)
+            ->reactive()
+            ->afterStateUpdated(function ($state, callable $set) {
+                $chofer = Chofer::findByCI($state);
+                if ($chofer) {
+                    $set('chofers_id', $chofer->id);
+                    $set('ci', $chofer->ci);
+                    $set('celular', $chofer->celular);
+                    $set('domicilio', $chofer->domicilio);
+                }
+            }),
+          
+           Forms\Components\Select::make('chofers_id')
+           // ->required()
+           ->relationship('chofers', 'chofer')
+           ->label('Nombre y Apellido del Chofer')
+           ->reactive()
+           ->afterStateUpdated(function ($state, callable $set) {
+            $chofer = Chofer::find($state);
+            if ($chofer) {
+                $set('ci', $chofer->ci);
+                $set('celular', $chofer->celular);
+                $set('domicilio', $chofer->domicilio);
+            }
+        })
+
+
+           ->createOptionForm([
             Forms\Components\TextInput::make('chofer')
-            ->required()
-            ->maxLength(255),
+                ->required()
+                ->label('Nombre y Apellido del Chofer')
+                ->maxLength(255),
+            Forms\Components\TextInput::make('ci')
+                ->required()
+                ->label('Numero de Cedula')
+                ->maxLength(255)
+                ->unique('chofers', 'ci'), // Esto asegura que el campo es único en la tabla chofers.
+               
+            Forms\Components\TextInput::make('celular')
+                ->required()
+                ->label('Numero de celular del Chofer')
+                ->maxLength(255),
+            Forms\Components\TextInput::make('domicilio')
+                ->required()
+                ->label('Domicilio del Chofer')
+                ->maxLength(255),
+            
+            
+        ]),
+            Forms\Components\TextInput::make('ci')->required(),
+            Forms\Components\TextInput::make('celular')->required(),
+            Forms\Components\TextInput::make('domicilio')->required(),
+
+          
             Forms\Components\TextInput::make('pesoTara')
             //->reactive()
            
@@ -120,16 +176,21 @@ class RemisionResource extends Resource
             //->required()
             ->maxLength(255),
 
-            Forms\Components\DatePicker::make('fecha_registro')
-            ->readonly()
-            //->required()
+            Forms\Components\DatePicker::make('fecha_ingreso')->required()
             ->default(fn () => now()),
+            Forms\Components\TimePicker::make('hora_ingreso')->required()
+            ->default(fn () => now()),
+
+           // Forms\Components\DatePicker::make('fecha_registro')
+           // ->readonly()
+            //->required()
+           // ->default(fn () => now()),
             //->disabled(),
 
-            Forms\Components\TimePicker::make('hora_registro')
-            ->readonly()
+            //Forms\Components\TimePicker::make('hora_registro')
+            //->readonly()
            //->required()
-           ->default(fn () => now()),
+           //->default(fn () => now()),
            //->disabled(),
         ]);
     }
@@ -138,38 +199,49 @@ class RemisionResource extends Resource
     {
         return $table
         ->columns([
-            Tables\Columns\TextColumn::make('empresas.nombre')->label('EMPRESA'),
-            Tables\Columns\TextColumn::make('empresas_clientes.nombre')->label('DESTINARIO'),
-            Tables\Columns\TextColumn::make('productos.nombre')->label('PRODUCTOS'),
+            Tables\Columns\TextColumn::make('empresas.nombre')->label('EMPRESA')->alignCenter(), // Centro el contenido de la columna,
+            Tables\Columns\TextColumn::make('empresas_clientes.nombre')->label('DESTINARIO')->alignCenter(), // Centro el contenido de la columna,
+            Tables\Columns\TextColumn::make('productos.nombre')->label('PRODUCTOS')->alignCenter(), // Centro el contenido de la columna,
             
-            Tables\Columns\TextColumn::make('pesoTara')->label('PESO TARA'),
-            Tables\Columns\TextColumn::make('pesoBruto')->label('PESO BRUTO'),
-            Tables\Columns\TextColumn::make('pesoNeto')->label('PESO NETO'),
+            Tables\Columns\TextColumn::make('pesoTara')->label('PESO TARA(KG)')->alignCenter() // Centro el contenido de la columna,
+            ->formatStateUsing(function ($state) {
+                return number_format($state, 0, ',', ','); // Formatear con separador de miles
+            }),
+            Tables\Columns\TextColumn::make('pesoBruto')->label('PESO BRUTO(KG)')->alignCenter() // Centro el contenido de la columna,
+            ->formatStateUsing(function ($state) {
+                return number_format($state, 0, ',', ','); // Formatear con separador de miles
+            }),
+            Tables\Columns\TextColumn::make('pesoNeto')->label('PESO NETO(KG)'),
+            
             TextColumn::make('pesoNeto')
-            ->label('PESO NETO')
+            ->label('PESO NETO')->alignCenter() // Centro el contenido de la columna,
             ->summarize(Sum::make())
             ->sortable()
-            ->searchable(),
+            ->searchable()
+             ->formatStateUsing(function ($state) {
+                return number_format($state, 0, ',', ','); // Formatear con separador de miles
+            }),
             Tables\Columns\TextColumn::make('humedad')->label('HUMEDAD'),
             TextColumn::make('humedad')
-                ->label('HUMEDAD H%')
+                ->label('HUMEDAD H%')->alignCenter() // Centro el contenido de la columna,
                 ->summarize(Average::make()),
                 
-            Tables\Columns\TextColumn::make('impureza')->label('IMPUREZA'),
-            Tables\Columns\TextColumn::make('transportadoras.nombre')->label('TRANSPORTADORA'),
+            Tables\Columns\TextColumn::make('impureza')->label('IMPUREZA')->alignCenter(), // Centro el contenido de la columna,
+            Tables\Columns\TextColumn::make('transportadoras.nombre')->label('TRANSPORTADORA')->alignCenter(), // Centro el contenido de la columna,
              
           
-            Tables\Columns\TextColumn::make('chofer')->label('CHOFER'),
-            Tables\Columns\TextColumn::make('chapaCamion')->label('CHAPA CAMION'),
+            Tables\Columns\TextColumn::make('chofers.chofer')->label('CHOFER')->alignCenter(), // Centro el contenido de la columna,
+            Tables\Columns\TextColumn::make('chapaCamion')->label('CHAPA CAMION')->alignCenter(), // Centro el contenido de la columna,
             Tables\Columns\TextColumn::make('chapaSemi')->label('CHAPA SEMI')
-            ->toggleable(isToggledHiddenByDefault: true),
+            ->toggleable(isToggledHiddenByDefault: true)->alignCenter(), // Centro el contenido de la columna,
             Tables\Columns\TextColumn::make('zafras.año')->label('ZAFRA')
-            ->toggleable(isToggledHiddenByDefault: true),
+            ->toggleable(isToggledHiddenByDefault: true)->alignCenter(), // Centro el contenido de la columna,
 
-            Tables\Columns\TextColumn::make('fecha_registro')
-            ->date()->label('FECHA'),
-            Tables\Columns\TextColumn::make('hora_registro')
-            ->time()->label('HORA'),
+            Tables\Columns\TextColumn::make('fecha_ingreso')
+            ->date()->label('FECHA')->alignCenter(), // Centro el contenido de la columna,
+
+            Tables\Columns\TextColumn::make('hora_ingreso')
+            ->time()->label('HORA')->alignCenter(), // Centro el contenido de la columna,
         ])
             ->filters([
                 SelectFilter::make('Zafra')->relationship('zafras', 'año')->label('Year Zafra'),
@@ -228,6 +300,15 @@ class RemisionResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
+        // dd(auth()->user()->id);
+        if (!auth()->user()->hasRole('super_admin')) {
+            return static::getModel()::query()->whereHas('empresas', function ($query) {
+                $query->where('empresas_id', auth()->user()->empresas->pluck('id'));
+            });
+        }
+
+
+
         return parent::getEloquentQuery()
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,

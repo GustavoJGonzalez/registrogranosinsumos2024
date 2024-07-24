@@ -18,6 +18,7 @@ class ParcelaResource extends Resource
     protected static ?string $model = Parcela::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-view-columns';
+    protected static ?string $navigationGroup = 'REGISTRO VARIOS';
 
     public static function form(Form $form): Form
     {
@@ -25,7 +26,10 @@ class ParcelaResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('nombre')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->afterStateUpdated(function ($state, $set) {
+                        $set('nombre', strtoupper($state));
+                    }),// este codigo sirve si se escribe en minuscula paso todos en mayuscula
                 Forms\Components\TextInput::make('hectarea')
                     ->required()
                     ->maxLength(255),
